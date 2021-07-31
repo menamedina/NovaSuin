@@ -112,7 +112,7 @@ class CreateNovasuinTable extends Migration
             $table->string('operador',25)->nullable();
             $table->integer('userId')->nullable();
             $table->timestamps();
-          //  $table->foreign('OP_id')->references('id')->on('ordenproduccion')->onDelete('cascade');
+          //$table->foreign('OP_id')->references('id')->on('ordenproduccion')->onDelete('cascade');
         });
 
     }
