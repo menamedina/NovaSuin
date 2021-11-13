@@ -22,6 +22,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::view('mail/sendmail', 'mail/sendmail');
+
+
 Auth::routes();
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
@@ -46,6 +49,7 @@ Route::get('/produccion/index', [ProduccionController::class, 'index'])->name('p
 Route::get('/produccion/create/{codigo}', [ProduccionController::class, 'create'])->name('produccion.create');
 Route::post('/produccion/store', [ProduccionController::class, 'store'])->name('produccion.store');
 Route::get('/produccion/PDF_OP/{id}', [ProduccionController::class, 'pdfOP'])->name('produccion.pdfOP');
+Route::get('/produccion/MAIL_OP/{id}', [ProduccionController::class, 'mailOP'])->name('produccion.mailOP');
 
 Route::get('posts',[PostController::class, 'index'])->name('posts.index');
 Route::get('posts/search',[PostController::class, 'search'])->name('posts.search');

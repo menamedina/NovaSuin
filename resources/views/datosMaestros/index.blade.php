@@ -18,7 +18,114 @@
     </div>
 
 </div>
+<input type="button" class="boton-gris" value="Imprimir Formulario" id="create_pdf" onclick="printdiv('ContenedorContabilidad');" />
+<div id="ContenedorContabilidad">
+<!--  <a onclick ="ImprimePDF();" ><img src="../SiteAssets/img/pdf.png"/></a> -->
+  <table id="tblContenedoraContabilidad" style="width:100%; border:0.5px; border-style:solid; border-color:silver;">
+  <!--<table id="tblContenedoraContabilidad" class="tablaMateriales"> -->
 
+    <tr>
+      <td>
+        <table style="width:100%">
+        <!--<table class="tablaGenerica">-->
+
+          <tr>
+            <td>
+              <div id="divEncabezado">
+                <table style="width:100%">
+                <!--<table class="tblEncabezado">-->
+                  <tr>
+                    <td style="width: 20%;">Departamento originador:</td>
+                    <td style="width: 45%;"><label id="nomDepOriConta" ></label></td>
+                    <td></td>
+                    <td style="width: 20%;">APE N°</td>
+                    <td style="width: 15%;"><label id="apeNumConta"></label></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 20%;">Centro de beneficio:</td>
+                    <td style="width: 45%;"><label id="centBeneConta"></label></td>
+                    <td></td>
+                    <td style="width: 20%;">Fecha de emisión</td>
+                    <td style="width: 15%;"><label id="fchFechaConta"></label></td>
+                  </tr>
+                </table>
+              </div>
+              <hr style="margin:0px 0px 10px 10px !important;background-color:#dcdcdc;border:none;height:1px;"/>
+            </td>
+          </tr>
+          <tr>
+             <td>Sírvase coordinar el retiro del siguiente
+              material dado de baja</td>
+          </tr>
+          <tr>
+            <td>
+              <table id="tblMaterialesContabilidad" style="width: 100%; border:0.5px; border-style:solid; border-color:silver;">
+              <!--<table id="tblMaterialesContabilidad" class="tablaMateriales">-->
+                <tr>
+                  <!--<th class="thMateriales">Item</th>  para todas la misma clase -->
+                  <th style="background:#F2F2F2; padding:3px;">Item</th>
+                  <th style="background:#F2F2F2; padding:3px;">Cantidad</th>
+                  <th style="background:#F2F2F2; padding:3px;">Unidad de Medida</th>
+                  <th style="background:#F2F2F2; padding:3px;">Descripcion</th>
+                  <th style="background:#F2F2F2; padding:3px;">Condicion</th>
+                  <th style="background:#F2F2F2; padding:3px;">Valor Sugerido USD</th>
+                  <th style="background:#F2F2F2; padding:3px;">Activo Fijo</th>
+                  <th style="background:#F2F2F2; padding:3px;">Autorizador por SAP</th>
+                  <th style="background:#F2F2F2; padding:3px;"></th>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+        <br/>
+    <!--    <hr style="margin:0px 0px 10px 10px !important;background-color:#dcdcdc;border:none;height:1px;"/> -->
+        <table id="tblFirmas" style="width: 100%; border:0.5px; border-style:solid; border-color:silver;">
+        <!--<table id="tblFirmas" class="tablaMateriales">-->
+        </table>
+      <!--  <hr style="margin:0px 0px 10px 10px !important;background-color:#dcdcdc;border:none;height:1px;"/> -->
+        <br/>
+        <table id="tablaContabilidad" style="width: 100%; border:0.5px; border-style:solid; border-color:silver;" >
+        <!--<table id="tablaContabilidad" class="tablaMateriales" >-->
+
+          <tr>
+            <th style="background:#F2F2F2; padding:3px; width:20%;" colspan="2" >Unidad Contabilidad</th>
+            <th style="background:#F2F2F2; padding:3px; width:80%;" colspan="5" >Dirección de Abastecimiento</th>
+          </tr>
+          <tr>
+            <th style="background:#F2F2F2; padding:3px; width:10%;" colspan="1">Ítem</th>
+            <th style="background:#F2F2F2; padding:3px; width:10%;" colspan="1" >N° activo fijo</th>
+            <th style="background:#F2F2F2; padding:3px; width:30%;" colspan="2" >Destino</th>
+            <th style="background:#F2F2F2; padding:3px; width:50%;" colspan="3" >Bodega</th>
+          </tr>
+          <tr>
+            <th colspan="1" style="width:10%;"></th>
+            <th colspan="1" style="width:10%;"></th>
+            <th style="background:#F2F2F2; padding:3px; width:15%;" colspan="1" >Bodega</th>
+            <th style="background:#F2F2F2; padding:3px; width:15%;" colspan="1" >Documento</th>
+            <th style="background:#F2F2F2; padding:3px; width:16%;" colspan="1" >Acción</th>
+            <th style="background:#F2F2F2; padding:3px; width:16%;" colspan="1" >Valor Sugerido USD</th>
+            <th style="background:#F2F2F2; padding:3px; width:18%;" colspan="1" >Documento</th>
+          </tr>
+        </table>
+      <!--  <hr style="margin:0px 0px 10px 10px !important;background-color:#dcdcdc;border:none;height:1px;"/> -->
+        <table id="tblContabilidadObservaciones" width="100%">
+          <tr>
+            <th>Observaciones</th>
+          </tr>
+        </table>
+      <!--  <table>
+          <tr>
+            <td>
+              <div id="buttons" class="botonera">
+                <input id="btnE" type="button" class="boton-gris" value="Guardar" onclick="GuardaContabilidad();"/>
+              </div>
+            </td>
+          </tr>
+        </table> -->
+      </td>
+    </tr>
+  </table>
+</div>
 
 <div class="wrapper wrapper-content animated fadeInRight">
     <div class="row">
@@ -65,6 +172,7 @@
                                         @if ($datosmaestro->grupo=="PT")
                                         <a href="{{route('produccion.create',$datosmaestro->codigo)}}" class="btn btn-xs btn-primary">
                                             <span class="fa fa-flask" data-toggle="tooltip" title="CrearOP!"></span>
+
                                         </a>
                                         @endif
                                     <td>{{$datosmaestro->codigo}}</td>

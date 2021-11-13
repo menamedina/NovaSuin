@@ -65,6 +65,8 @@
                                 <tr class="gradeX">
                                     <td><a href="" class="btn btn-xs btn-info"><span class="fa fa-edit" data-toggle="tooltip" title="Editar!"></span> </a>
                                         <a href="{{route('produccion.pdfOP',$ordenProduccion->id)}}" class="btn btn-xs btn-warning"><span class="fa fa-print" data-toggle="tooltip" title="Imprimir!"></span> </a>
+                                        <a href="{{route('produccion.mailOP',$ordenProduccion->id)}}" class="btn btn-xs btn-primary"><span class="fa fa-envelope" data-toggle="tooltip" title="Enviar al Cliente!"></span> </a>
+
                                     </td>
                                     <td>{{$ordenProduccion->codigo}}</td>
                                     <td>{{$ordenProduccion->referencia}}</td>
@@ -88,7 +90,6 @@
 @endsection
 @section('js')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
     @if(session('error') == 'codigoExiste')
     <script>
         Swal.fire(
@@ -104,6 +105,15 @@
         Swal.fire(
         'Actualizado!',
         'Su Registro fue Actualiado con Exito.',
+        'success'
+        )
+    </script>
+    @endif
+    @if(session('mailEnviado') == 'Ok')
+    <script>
+        Swal.fire(
+        'Enviado!',
+        'El certificado se envio con exito.',
         'success'
         )
     </script>
@@ -127,5 +137,7 @@
     </script>
     @endif
 @endsection
+
+
 
 

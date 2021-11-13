@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Mail;
 
 class ProduccionController extends Controller
 {
@@ -17,6 +18,9 @@ class ProduccionController extends Controller
     public function index()
     {
         //
+
+
+
         $ordenProducciones = ModelProduccion::select('*')//where('codigo', $codigo)
         ->get();
         return view('produccion.index',[
@@ -52,9 +56,6 @@ class ProduccionController extends Controller
     public function store(Request $request)
     {
         //
-
-
-
         $ordenes = new ModelProduccion();
         $ordenes->codigo = $request->codigo;
         $ordenes->referencia = $request->referencia;
@@ -64,11 +65,7 @@ class ProduccionController extends Controller
         $ordenes->status = $request->status;
         $ordenes->userId = Auth::user()->id;
         $ordenes->save();
-
-
         $ultimo = ModelProduccion::latest()->first();
-
-
         $registros = count($request->loteLM);
         $cont = 0;
        #return $request;
@@ -87,22 +84,51 @@ class ProduccionController extends Controller
             $cont++;
            }
 #    return $cont;
-
-
-
-
         return redirect()->route('produccion.index')->with('Guardado','Ok');
     }
     public function pdfOP($id)
     {
-
         /*$data = [
                 'title' => 'Welcome to ItSolutionStuff.com',
                 'date' => date('m/d/Y')
             ];
-
             $pdf = PDF::loadView('datosMaestros.myPDF', $data);
         */
+        #orden de produccion
+        $ordenProducciones =DB::table('ordenproduccion')
+        ->select('*')
+        ->where('id',$id)
+        ->get();
+        //return $ordenProducciones[0]->id;
+        DB::statement(DB::raw('SET @rownum = 0'));
+        $ordenProduccionesD =DB::table('ordenproduccionD')
+        ->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))
+        ->where('OP_id',$ordenProducciones[0]->id)
+        ->get();
+       //return $ordenProduccionesD;
+        $especificaciones =DB::table('especificaciones')
+        ->select('*')
+        ->get();
+        /*
+            #visualizar
+
+            $pdf = PDF::loadView('produccion.pdfOP',[
+            'ordenProduccionesD' =>$ordenProduccionesD,
+            'especificaciones' =>$especificaciones,
+            'ordenProducciones' =>$ordenProducciones
+            ])->setOptions(['defaultFont' => 'sans-serif']);
+        */
+        $pdf = PDF::loadView('produccion.pdfOP',
+        [
+            'ordenProduccionesD' =>$ordenProduccionesD,
+            'especificaciones' =>$especificaciones,
+            'ordenProducciones' =>$ordenProducciones
+        ])->setOptions(['defaultFont' => 'sans-serif']);
+        return $pdf->setPaper('legal')->stream();
+
+    }
+    public function mailOP($id)
+    {
 
         #orden de produccion
         $ordenProducciones =DB::table('ordenproduccion')
@@ -116,39 +142,30 @@ class ProduccionController extends Controller
         ->where('OP_id',$ordenProducciones[0]->id)
         ->get();
        //return $ordenProduccionesD;
-
-
         $especificaciones =DB::table('especificaciones')
         ->select('*')
         ->get();
-
-
-      /*
-        $datas =DB::table('listamateriales')
-        ->select('*',DB::raw('@rownum := @rownum + 1 as rownum'))
-        //->where('idCodigo',$datosMaestros->codigo)
-        ->get();
-*/
-        //$pdf = PDF::loadView('datosMaestros.myPDF',compact('datas'))->setOptions(['defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView('produccion.pdfOP',[
+        $data["email"] = "facturacion@quimicaorion.com.co";
+        $data["title"] = "Certificado de Calidad Quimica Orión";
+        $data["body"] = "Mensaje enviado desde Intranet .";
+        $pdf = PDF::loadView('produccion.pdfOP',
+        [
             'ordenProduccionesD' =>$ordenProduccionesD,
             'especificaciones' =>$especificaciones,
             'ordenProducciones' =>$ordenProducciones
         ])->setOptions(['defaultFont' => 'sans-serif']);
-        //return $pdf->setPaper('a4', 'landscape')->stream();
-        return $pdf->setPaper('legal')->stream();
-        //$pdf = PDF::loadView('welcome');
-        //return $pdf->setPaper('a4', 'landscape')->stream();
-
-        /*#para guardar pdf
-        $datas = ModelListaMateriales::all();
-        $pdf = PDF::loadView('datosMaestros.myPDF',compact('datas'))->setOptions(['defaultFont' => 'sans-serif']);
-        Storage::disk('public')->put(date('Y-m-d-H-i-s').'pruebaPDF',$pdf);*/
-
-        //return redirect()->back()->with('status','pDF guardado')
-
-
-        //return $pdf->download('datosMaestros.pdf');
+        Mail::send('mail.sendMail',
+        /*[
+            'ordenProduccionesD' =>$ordenProduccionesD,
+            'especificaciones' =>$especificaciones,
+            'ordenProducciones' =>$ordenProducciones
+        ],*/
+        $data, function ($message) use ($data, $pdf) {
+            $message->to($data["email"]) //, $data["email"] estaba 2 veces
+                ->subject($data["title"])
+                ->attachData($pdf->output(), "test.pdf");
+        });
+        return redirect()->route('produccion.index')->with('mailEnviado','Ok');
     }
     public function show($id)
     {
@@ -159,8 +176,6 @@ class ProduccionController extends Controller
     {
         //
     }
-
-
     public function update(Request $request, $id)
     {
         //
